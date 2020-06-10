@@ -1,5 +1,7 @@
 bundle.js
 package-lock.json
 
+output/bundle.js
+
 node_modules
 
