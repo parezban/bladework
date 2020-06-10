@@ -1,0 +1,15 @@
+{
+  "name": "bladework",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bundle.js",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c rollup.dev.config.js -w"
+  },
+  "author": "Parezban",
+  "license": "MIT",
+  "devDependencies": {
+    "rollup": "^2.15.0"
+  }
+}
