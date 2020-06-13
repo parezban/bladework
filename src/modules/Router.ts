@@ -18,8 +18,26 @@ window.addEventListener('locationchange', function (event) {
 
 const RoutesCollection = []
 
+interface Route {
+    route: string;
+    fn: Function;
+}
+
+const RouteHandler = {
+    init: (route : Route)=>{
+
+    },
+    match: (route : Route)=>{
+        
+    }
+}
+
+
 export default {
     replace: (data: object, title: string | null, url: string | null) => history.pushState(data, title, url),
-    add: (data: object) => RoutesCollection.push(data)
+    add: (route: string, fn: Function) => RoutesCollection.push({
+        route,
+        fn
+    })
 
 }
