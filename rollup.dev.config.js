@@ -10,7 +10,9 @@ export default {
     format: 'iife'
   },
   plugins: [
-    typescript(),
+    typescript({
+        "target": "ES2016"
+    }),
     serve({ contentBase: './output/',open:true }),
     livereload()
   ]
