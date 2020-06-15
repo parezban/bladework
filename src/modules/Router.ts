@@ -14,6 +14,11 @@ history.replaceState = (f => function replaceState() {
 
 window.addEventListener('locationchange', function (event: any) {
     console.log('location changed!', event.detail);
+
+    RouteHandler.init({
+        route: event.detail[2],
+        params: event.detail[0]
+    })
 })
 
 const RoutesCollection = []
@@ -26,7 +31,7 @@ interface Route {
 
 interface ChosenRoute {
     route: string;
-    fn: Function;
+    params: object;
 }
 
 
@@ -37,22 +42,39 @@ interface Config {
 
 
 const RouteHandler = {
-    init: (route: Route) => {
+    cfg: { base: '/' },
+    init: (route: ChosenRoute) => {
         const chosenRoute: Route | null = RouteHandler.match(route)
     },
-    match: (route: Route) => {
+    match: (route: ChosenRoute) => {
         RoutesCollection.forEach(walkRoute => {
-            if (walkRoute === route) {
-                return route
-            }
+            console.log('============================================')
+            console.log('check route from collection ====>', walkRoute)
+            console.log('chosen route ====>', route)
+            // const x = RouteHandler.config;
+            console.log('base ====>', RouteHandler.config)
+            console.log('path ====>', window.location.pathname)
+            console.log('walkRoute route ====>', walkRoute.route)
+            const pattern = new RegExp(walkRoute.route);
+
+            console.log('regex ====>', pattern.test(route.route))
+
+            console.log('============================================')
+
+            // if (walkRoute === route) {
+            //     return route
+            // }
         })
         return null
     },
     set config(cfg: Config) {
-        this.config = (cfg !== null ? cfg : '/')
+        RouteHandler.cfg = {
+            ...cfg,
+            base: (cfg.base || '/')
+        }
     },
     get config(): Config {
-        return this.config
+        return RouteHandler.cfg
     }
 
 }
