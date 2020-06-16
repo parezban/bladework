@@ -12,8 +12,7 @@ history.replaceState = (f => function replaceState() {
 })(history.replaceState);
 
 
-window.addEventListener('locationchange', function (event: any) {
-    console.log('location changed!', event.detail);
+window.addEventListener('locationchange', (event: any) => {
 
     RouteHandler.init({
         route: event.detail[2],
@@ -29,7 +28,7 @@ interface Route {
 }
 
 
-interface ChosenRoute {
+interface CurrentRoute {
     route: string;
     params: object;
 }
@@ -43,10 +42,10 @@ interface Config {
 
 const RouteHandler = {
     cfg: { base: '/' },
-    init: (route: ChosenRoute) => {
+    init: (route: CurrentRoute) => {
         const chosenRoute: Route | null = RouteHandler.match(route)
     },
-    match: (route: ChosenRoute) => {
+    match: (route: CurrentRoute) => {
         RoutesCollection.forEach(walkRoute => {
             console.log('============================================')
             console.log('check route from collection ====>', walkRoute)
@@ -55,9 +54,11 @@ const RouteHandler = {
             console.log('base ====>', RouteHandler.config)
             console.log('path ====>', window.location.pathname)
             console.log('walkRoute route ====>', walkRoute.route)
-            const pattern = new RegExp(walkRoute.route);
+            const pattern = new RegExp(walkRoute.route.replace(/\//g, '\\/'));
 
-            console.log('regex ====>', pattern.test(route.route))
+            console.log('replace xxxx>', walkRoute.route.replace('/', '\/'))
+            console.log('regex ====>', pattern)
+            console.log('regex test  ====>', pattern.test(route.route))
 
             console.log('============================================')
 
@@ -83,9 +84,6 @@ const RouteHandler = {
 export default {
     config: (data: Config) => { RouteHandler.config = data },
     replace: (data: object, title: string | null, url: string | null) => history.pushState(data, title, url),
-    add: (route: string, fn: Function) => RoutesCollection.push({
-        route,
-        fn
-    })
+    add: (route: Route) => RoutesCollection.push(route)
 
 }

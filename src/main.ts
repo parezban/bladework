@@ -1,7 +1,10 @@
 import Router from "./modules/Router";
 
-Router.add('/main/(d+)', () => {
-    console.log('test')
+Router.add({
+    route: '/main/(\d+)',
+    fn: () => {
+        console.log('test')
+    }
 })
 Router.replace({ xxxxxxx: 1 }, "xxxxxxx 1", "?xxxxxxx=1")
 Router.replace({ yy: 1 }, "xxxxxxx 1", "?yy=1")
