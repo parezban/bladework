@@ -17,7 +17,7 @@ window.addEventListener('locationchange', (event: any) => {
     RouteHandler.init({
         route: event.detail[2],
         params: event.detail[0]
-    })
+    }).match()
 })
 
 const RoutesCollection = []
@@ -40,49 +40,37 @@ interface Config {
 }
 
 
-const RouteHandler = {
-    cfg: { base: '/' },
-    init: (route: CurrentRoute) => {
-        const chosenRoute: Route | null = RouteHandler.match(route)
-    },
-    match: (route: CurrentRoute) => {
+class RouteHandler {
+    private route: CurrentRoute
+    private constructor() { }
+    static init(route: CurrentRoute) {
+        const rHandler = new RouteHandler()
+        rHandler.currentRoute = route
+        return rHandler
+    }
+
+    set currentRoute(route: CurrentRoute) {
+        this.route = route
+    }
+    get currentRoute() {
+        return this.route
+    }
+
+    match() {
         RoutesCollection.forEach(walkRoute => {
-            console.log('============================================')
-            console.log('check route from collection ====>', walkRoute)
-            console.log('chosen route ====>', route)
-            // const x = RouteHandler.config;
-            console.log('base ====>', RouteHandler.config)
-            console.log('path ====>', window.location.pathname)
-            console.log('walkRoute route ====>', walkRoute.route)
             const pattern = new RegExp(walkRoute.route.replace(/\//g, '\\/'));
-
-            console.log('replace xxxx>', walkRoute.route.replace('/', '\/'))
-            console.log('regex ====>', pattern)
-            console.log('regex test  ====>', pattern.test(route.route))
-
-            console.log('============================================')
-
-            // if (walkRoute === route) {
-            //     return route
-            // }
+            if (pattern.test(this.currentRoute.route)) {
+                console.log('route without params found')
+            }
         })
         return null
-    },
-    set config(cfg: Config) {
-        RouteHandler.cfg = {
-            ...cfg,
-            base: (cfg.base || '/')
-        }
-    },
-    get config(): Config {
-        return RouteHandler.cfg
     }
+
 
 }
 
 
 export default {
-    config: (data: Config) => { RouteHandler.config = data },
     replace: (data: object, title: string | null, url: string | null) => history.pushState(data, title, url),
     add: (route: Route) => RoutesCollection.push(route)
 

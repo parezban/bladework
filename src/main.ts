@@ -1,7 +1,7 @@
 import Router from "./modules/Router";
 
 Router.add({
-    route: '/main/(\d+)',
+    route: '/main/(\\d+)',
     fn: () => {
         console.log('test')
     }
