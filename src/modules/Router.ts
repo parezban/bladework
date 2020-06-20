@@ -58,7 +58,11 @@ class RouteHandler {
 
     match() {
         RoutesCollection.forEach(walkRoute => {
-            const pattern = new RegExp(walkRoute.route.replace(/\//g, '\\/'));
+            let clearRoute = walkRoute.route.replace(/\//g, '\\/');
+            const params: Array<string> = clearRoute.match(/\{[a-z]+[a-z0-9]\}/gm)
+            clearRoute = clearRoute.replace(/\{[a-z]+[a-z0-9]\}/gm, '(.*)');
+            const pattern = new RegExp(clearRoute);
+
             if (pattern.test(this.currentRoute.route)) {
                 console.log('route without params found')
             }
